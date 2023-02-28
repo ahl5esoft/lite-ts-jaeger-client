@@ -1,6 +1,6 @@
 import { opentracing } from 'jaeger-client';
 
-export type finishPredicate = (name: string, tags: { [key: string]: any; }) => Promise<boolean>;
+export type FinishPredicate = (name: string, tags: { [key: string]: any; }) => Promise<boolean>;
 
 export class Span extends opentracing.Span {
     private m_Tags: { [key: string]: any; } = {};
@@ -9,7 +9,7 @@ export class Span extends opentracing.Span {
         private m_Name: string,
         private m_Span: opentracing.Span,
         private m_Tracer: opentracing.Tracer,
-        private m_FinishPredicate?: finishPredicate
+        private m_FinishPredicate?: FinishPredicate
     ) {
         super();
     }

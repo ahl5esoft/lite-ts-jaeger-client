@@ -1,6 +1,6 @@
 import { initTracer, opentracing, TracingConfig, TracingOptions } from 'jaeger-client';
 
-import { Span, finishPredicate } from './span';
+import { Span, FinishPredicate } from './span';
 
 export class RootTracer extends opentracing.Tracer {
     private m_Tracer: opentracing.Tracer;
@@ -8,7 +8,7 @@ export class RootTracer extends opentracing.Tracer {
     public constructor(
         tracingConfig: TracingConfig,
         tracingOptions: TracingOptions,
-        private m_FinishPredicate?: finishPredicate
+        private m_FinishPredicate?: FinishPredicate
     ) {
         super();
 
