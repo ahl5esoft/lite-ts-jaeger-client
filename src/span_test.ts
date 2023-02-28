@@ -1,12 +1,12 @@
 import { strictEqual } from 'assert';
 
-import { initRootGlobalTracer } from './root-global-tracer';
+import { RootTracer } from './root-tracer';
 import { Span as Self } from './span';
 
-describe('src/root-global-tracer.ts', () => {
+describe('src/span.ts', () => {
     describe('.finish(timestamp?: number)', () => {
         it('ok', async () => {
-            const tracer = initRootGlobalTracer(
+            const tracer = new RootTracer(
                 {
                     serviceName: 'framework-dev-gateway',
                     reporter: {

@@ -1,11 +1,11 @@
 import { notStrictEqual, strictEqual } from 'assert';
 import { opentracing } from 'jaeger-client';
 
-import { initChildGlobalTracer } from './child-global-tracer';
+import { ChildTracer } from './child-tracer';
 
-describe('src/child-global-tracer.ts', () => {
+describe('src/child-tracer.ts', () => {
     describe('.extract(format: string, carrier: any)', () => {
-        const tracer = initChildGlobalTracer(
+        const tracer = new ChildTracer(
             {
                 serviceName: 'framework-dev-gateway',
                 reporter: {
