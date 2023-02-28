@@ -1,2 +1,2 @@
-export * from './child-global-tracer';
-export * from './root-global-tracer';
+export * from './child-tracer';
+export * from './root-tracer';

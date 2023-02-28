@@ -1,10 +1,16 @@
 import { initTracer, opentracing, TracingConfig, TracingOptions } from 'jaeger-client';
 
-class ChildGlobalTracerDelegate extends opentracing.Tracer {
+export class ChildTracer extends opentracing.Tracer {
+    private m_Tracer: opentracing.Tracer;
+
     public constructor(
-        private m_Tracer: opentracing.Tracer
+        tracingConfig: TracingConfig,
+        tracingOptions: TracingOptions,
     ) {
         super();
+
+        this.m_Tracer = initTracer(tracingConfig, tracingOptions);
+        opentracing.initGlobalTracer(this.m_Tracer);
     }
 
     public extract(format: string, carrier: any) {
@@ -21,16 +27,4 @@ class ChildGlobalTracerDelegate extends opentracing.Tracer {
     public inject(spanContext: opentracing.SpanContext | opentracing.Span, format: string, carrier: any) {
         return this.m_Tracer.inject(spanContext, format, carrier);
     }
-}
-
-let childGlobalTracerDelegate: opentracing.Tracer;
-
-export function initChildGlobalTracer(tracingConfig: TracingConfig, tracingOptions: TracingOptions) {
-    const tracer = initTracer(tracingConfig, tracingOptions);
-    childGlobalTracerDelegate = new ChildGlobalTracerDelegate(tracer);
-    return childGlobalTracerDelegate;
-}
-
-export function childGlobalTracer(): opentracing.Tracer {
-    return childGlobalTracerDelegate;
 }

@@ -1,6 +1,6 @@
 import { opentracing } from 'jaeger-client';
 
-export type recordFunction = (name: string, tags: { [key: string]: any; }) => Promise<boolean>;
+export type finishPredicate = (name: string, tags: { [key: string]: any; }) => Promise<boolean>;
 
 export class Span extends opentracing.Span {
     private m_Tags: { [key: string]: any; } = {};
@@ -9,7 +9,7 @@ export class Span extends opentracing.Span {
         private m_Name: string,
         private m_Span: opentracing.Span,
         private m_Tracer: opentracing.Tracer,
-        private m_RecordFn?: recordFunction
+        private m_FinishPredicate?: finishPredicate
     ) {
         super();
     }
@@ -58,8 +58,8 @@ export class Span extends opentracing.Span {
     }
 
     public async finish(finishTime?: number) {
-        if (this.m_RecordFn) {
-            const ok = await this.m_RecordFn(this.m_Name, this.m_Tags);
+        if (this.m_FinishPredicate) {
+            const ok = await this.m_FinishPredicate(this.m_Name, this.m_Tags);
             if (!ok)
                 return;
         }
