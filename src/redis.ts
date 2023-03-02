@@ -10,15 +10,15 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
      * 构造函数
      * 
      * @param m_Redis redis实例
-     * @param tracer tracer
+     * @param m_Tracer tracer
      * @param parentTracerSpan 父跟踪范围
      */
     public constructor(
         private m_Redis: IRedis,
-        tracer: opentracing.Tracer,
+        private m_Tracer: opentracing.Tracer,
         parentTracerSpan?: opentracing.Span
     ) {
-        this.m_TracerSpan = parentTracerSpan ? tracer.startSpan('redis', {
+        this.m_TracerSpan = parentTracerSpan ? m_Tracer.startSpan('redis', {
             childOf: parentTracerSpan
         }) : null;
     }
@@ -301,8 +301,12 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
      * 
      * @param parentSpan 父范围
      */
-    public withTrace(parentSpan: any) {
-        return parentSpan ? new JeagerClientRedis(this.m_Redis, parentSpan) : this;
+    public withTrace(parentSpan: opentracing.Span) {
+        return parentSpan ? new JeagerClientRedis(
+            this.m_Redis,
+            this.m_Tracer,
+            parentSpan,
+        ) : this;
     }
 
     /**

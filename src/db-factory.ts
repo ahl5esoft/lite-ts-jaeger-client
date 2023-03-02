@@ -32,7 +32,11 @@ export class JaegerClientDbFactory implements IDbFactory, ITraceable<IDbFactory>
         );
     }
 
-    public withTrace(parentSpan: any) {
-        return parentSpan ? new JaegerClientDbFactory(this.m_DbFactory, parentSpan) : this.m_DbFactory;
+    public withTrace(parentSpan: opentracing.Span) {
+        return parentSpan ? new JaegerClientDbFactory(
+            this.m_DbFactory,
+            this.m_Tracer,
+            parentSpan
+        ) : this.m_DbFactory;
     }
 }

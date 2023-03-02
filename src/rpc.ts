@@ -60,7 +60,7 @@ export class JaegerClientRpc implements IRpc, ITraceable<IRpc> {
         return resp;
     }
 
-    public withTrace(parentSpan: any) {
+    public withTrace(parentSpan: opentracing.Span) {
         return parentSpan ? new JaegerClientRpc(
             this.m_BuildErrorFunc,
             this.m_BuildRpcFunc,
