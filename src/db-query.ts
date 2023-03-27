@@ -1,7 +1,5 @@
 import { opentracing } from 'jaeger-client';
-
-import { IDbQueryOption } from './i-db-query-option';
-import { IDbQuery } from './i-db-query';
+import { DbQueryOption, IDbQuery } from 'lite-ts-db';
 
 export class JaegerClientDbQuery<T> implements IDbQuery<T> {
     private m_TracerSpan: opentracing.Span;
@@ -46,7 +44,7 @@ export class JaegerClientDbQuery<T> implements IDbQuery<T> {
         }
     }
 
-    public async toArray(v?: Partial<IDbQueryOption<any>>) {
+    public async toArray(v?: Partial<DbQueryOption<any>>) {
         try {
             if (v)
                 this.m_TracerSpan?.log?.(v);

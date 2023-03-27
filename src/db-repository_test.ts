@@ -1,33 +1,31 @@
 import { strictEqual } from 'assert';
+import { DbModel, IDbRepository } from 'lite-ts-db';
 import { Mock } from 'lite-ts-mock';
 
 import { JaegerClientDbRepository as Self } from './db-repository';
-import { IDbFactory } from './i-db-factory';
-import { IDbRepository } from './i-db-repository';
 
-class TestDbRepository { }
+class TestDbRepository extends DbModel { }
 
 describe('src/service/jaeger/db-repository.ts', () => {
-    describe('.repo[proctected]', () => {
+    describe('.query()', () => {
         it('ok', () => {
-            const mockDbFactory = new Mock<IDbFactory>();
+            const mockDbRepository = new Mock<IDbRepository<TestDbRepository>>({
+                model: TestDbRepository.name
+            });
             const self = new Self(
+                mockDbRepository.actual,
                 null,
-                TestDbRepository,
-                mockDbFactory.actual,
-                null,
-                null,
-                'uow' as any,
             );
 
-            const mockDbRepo = new Mock<IDbRepository<TestDbRepository>>();
-            mockDbFactory.expectReturn(
-                r => r.db(TestDbRepository, 'uow'),
-                mockDbRepo.actual
+            const query_ = {};
+            mockDbRepository.expectReturn(
+                r => r.query(),
+                query_
             );
 
-            const res = Reflect.get(self, 'repo');
-            strictEqual(res, mockDbRepo.actual);
+            const res = self.query();
+            strictEqual(Reflect.get(res, 'm_DbQuery'), query_);
+            strictEqual(Reflect.get(res, 'm_Table'), TestDbRepository.name);
         });
     });
 });

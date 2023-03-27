@@ -1,26 +1,26 @@
 import { opentracing } from 'jaeger-client';
+import { DbFactoryBase, DbModel, DbOption, IUnitOfWorkRepository } from 'lite-ts-db';
 
 import { JaegerClientDbRepository } from './db-repository';
-import { JaegerClientUnitOfWork } from './unit-of-work';
-import { IDbFactory } from './i-db-factory';
 import { ITraceable } from './i-traceable';
-import { IUnitOfWorkRepository } from './i-unit-of-work-repository';
+import { JaegerClientUnitOfWork } from './unit-of-work';
 
-export class JaegerClientDbFactory implements IDbFactory, ITraceable<IDbFactory> {
+export class JaegerClientDbFactory extends DbFactoryBase implements ITraceable<DbFactoryBase> {
     public constructor(
-        private m_DbFactory: IDbFactory,
+        private m_DbFactory: DbFactoryBase,
         private m_Tracer: opentracing.Tracer,
         private m_ParentSpan?: opentracing.Span
-    ) { }
+    ) {
+        super();
+    }
 
-    public db<T>(model: new () => T, uow?: IUnitOfWorkRepository) {
+    public db<T extends DbModel>(...dbOptions: DbOption[]) {
+        const dbRepository = this.m_DbFactory.db<T>(...dbOptions);
+
         return new JaegerClientDbRepository<T>(
-            this,
-            model,
-            this.m_DbFactory,
-            this.m_ParentSpan,
+            dbRepository,
             this.m_Tracer,
-            uow,
+            this.m_ParentSpan
         );
     }
 

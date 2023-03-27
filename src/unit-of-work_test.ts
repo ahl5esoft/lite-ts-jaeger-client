@@ -1,8 +1,8 @@
 import { opentracing } from 'jaeger-client';
+import { IUnitOfWorkRepository } from 'lite-ts-db';
 import { Mock } from 'lite-ts-mock';
 
 import { JaegerClientUnitOfWork as Self } from './unit-of-work';
-import { IUnitOfWorkRepository } from './i-unit-of-work-repository';
 
 class TestUnitOfWorkModel { }
 
@@ -31,7 +31,7 @@ describe('src/service/jaeger-client/unit-of-work.ts', () => {
         it('ok', () => {
             const self = new Self(null, null, null);
 
-            self.registerAdd(TestUnitOfWorkModel, {});
+            self.registerAdd(TestUnitOfWorkModel.name, {});
         });
     });
 
@@ -40,9 +40,9 @@ describe('src/service/jaeger-client/unit-of-work.ts', () => {
             const mockUow = new Mock<IUnitOfWorkRepository>();
             const self = new Self(mockUow.actual, null, null);
 
-            mockUow.expected.registerRemove(TestUnitOfWorkModel, {});
+            mockUow.expected.registerRemove(TestUnitOfWorkModel.name, {});
 
-            self.registerRemove(TestUnitOfWorkModel, {});
+            self.registerRemove(TestUnitOfWorkModel.name, {});
         });
     });
 
@@ -51,9 +51,9 @@ describe('src/service/jaeger-client/unit-of-work.ts', () => {
             const mockUow = new Mock<IUnitOfWorkRepository>();
             const self = new Self(mockUow.actual, null, null);
 
-            mockUow.expected.registerSave(TestUnitOfWorkModel, {});
+            mockUow.expected.registerSave(TestUnitOfWorkModel.name, {});
 
-            self.registerSave(TestUnitOfWorkModel, {});
+            self.registerSave(TestUnitOfWorkModel.name, {});
         });
     });
 });
