@@ -5,7 +5,8 @@
   },
   "description": "链路追踪",
   "dependencies": {
-    "jaeger-client": "^3.19.0"
+    "jaeger-client": "^3.19.0",
+    "lite-ts-rpc": "^1.5.0"
   },
   "devDependencies": {
     "@types/jaeger-client": "^3.18.4",

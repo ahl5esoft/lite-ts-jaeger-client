@@ -12,7 +12,7 @@ export class JaegerClientDbQuery<T> implements IDbQuery<T> {
         private m_Tracer: opentracing.Tracer,
         parentTracerSpan: opentracing.Span,
     ) {
-        this.m_TracerSpan = parentTracerSpan ? this.m_Tracer.startSpan('db.query', {
+        this.m_TracerSpan = parentTracerSpan ? this.m_Tracer?.startSpan('db.query', {
             childOf: parentTracerSpan,
             tags: {
                 table: this.m_Table
