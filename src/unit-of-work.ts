@@ -1,6 +1,5 @@
 import { opentracing } from 'jaeger-client';
-
-import { IUnitOfWorkRepository } from './i-unit-of-work-repository';
+import { IUnitOfWorkRepository } from 'lite-ts-db';
 
 enum Action {
     delete = 'remove',
@@ -17,7 +16,7 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
     private m_Queue: {
         action: Action;
         entry: any;
-        model: new () => any;
+        model: string;
     }[] = [];
 
     public constructor(
@@ -51,7 +50,7 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
         this.m_AfterAction[key] = action;
     }
 
-    public registerAdd<T>(model: new () => T, entry: T) {
+    public registerAdd<T>(model: string, entry: T) {
         this.m_Queue.push({
             action: Action.insert,
             entry,
@@ -59,7 +58,7 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
         });
     }
 
-    public registerRemove<T>(model: new () => T, entry: T) {
+    public registerRemove<T>(model: string, entry: T) {
         this.m_Queue.push({
             action: Action.delete,
             entry,
@@ -67,7 +66,7 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
         });
     }
 
-    public registerSave<T>(model: new () => T, entry: T) {
+    public registerSave<T>(model: string, entry: T) {
         this.m_Queue.push({
             action: Action.update,
             entry,
@@ -79,7 +78,7 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
         if (!this.m_Queue.length)
             return;
 
-        const tracerSpan = this.m_ParentTracerSpan ? this.m_Tracer.startSpan('db.uow', {
+        const tracerSpan = this.m_ParentTracerSpan ? this.m_Tracer?.startSpan('db.uow', {
             childOf: this.m_ParentTracerSpan
         }) : null;
 
@@ -102,7 +101,7 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
                 tracerSpan?.log?.({
                     action: 'save',
                     entry: r.entry,
-                    table: r.model.name
+                    table: r.model
                 });
             }
 

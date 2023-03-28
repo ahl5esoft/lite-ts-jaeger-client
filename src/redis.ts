@@ -18,7 +18,7 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
         private m_Tracer: opentracing.Tracer,
         parentTracerSpan?: opentracing.Span
     ) {
-        this.m_TracerSpan = parentTracerSpan ? m_Tracer.startSpan('redis', {
+        this.m_TracerSpan = parentTracerSpan ? m_Tracer?.startSpan('redis', {
             childOf: parentTracerSpan
         }) : null;
     }

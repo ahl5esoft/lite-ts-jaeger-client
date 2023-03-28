@@ -21,6 +21,9 @@ export class ChildTracer extends opentracing.Tracer {
     }
 
     public startSpan(name: string, options: opentracing.SpanOptions = {}) {
+        if (!options.childOf)
+            return null;
+
         return this.m_Tracer.startSpan(name, options);
     }
 
