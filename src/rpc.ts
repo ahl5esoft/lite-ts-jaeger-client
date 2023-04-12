@@ -30,7 +30,7 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
         }) : null;
     }
 
-    public async callWithoutThrow<T>(v: RpcCallOption) {
+    protected async onCall<T>(v: RpcCallOption) {
         v.header ??= {};
 
         if (this.m_TracerSpan) {
@@ -38,7 +38,7 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
             this.m_Tracer?.inject(this.m_TracerSpan, opentracing.FORMAT_HTTP_HEADERS, v.header);
         }
 
-        const resp = await this.m_Rpc.callWithoutThrow<T>(v);
+        const resp = await this.m_Rpc.call<T>(v);
 
         if (this.m_TracerSpan) {
             this.m_TracerSpan.log({
