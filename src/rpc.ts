@@ -15,11 +15,11 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
     /**
      * 构造函数
      * 
-     * @param m_BuildRpcFunc 创建rpc函数
+     * @param m_Rpc 创建rpc函数
      * @param tracerSpan 父跟踪范围
      */
     public constructor(
-        private m_BuildRpcFunc: () => RpcBase,
+        private m_Rpc: RpcBase,
         private m_Tracer: opentracing.Tracer,
         tracerSpan: opentracing.Span,
     ) {
@@ -30,7 +30,7 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
         }) : null;
     }
 
-    public async callWithoutThrow<T>(v: RpcCallOption) {
+    protected async onCall<T>(v: RpcCallOption) {
         v.header ??= {};
 
         if (this.m_TracerSpan) {
@@ -38,7 +38,7 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
             this.m_Tracer?.inject(this.m_TracerSpan, opentracing.FORMAT_HTTP_HEADERS, v.header);
         }
 
-        const resp = await this.m_BuildRpcFunc().callWithoutThrow<T>(v);
+        const resp = await this.m_Rpc.call<T>(v);
 
         if (this.m_TracerSpan) {
             this.m_TracerSpan.log({
@@ -55,7 +55,7 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
 
     public withTrace(parentSpan: opentracing.Span) {
         return parentSpan ? new JaegerClientRpc(
-            this.m_BuildRpcFunc,
+            this.m_Rpc,
             this.m_Tracer,
             parentSpan
         ) : this;
