@@ -37,5 +37,5 @@
     "test": "mocha -t 30s -r ./node_modules/ts-node/register/index.js --exit",
     "ss": "ts-node ./src/index.ts"
   },
-  "version": "1.4.0"
+  "version": "1.5.0"
 }
