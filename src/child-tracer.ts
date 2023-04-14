@@ -10,7 +10,7 @@ export class ChildTracer extends opentracing.Tracer {
         super();
 
         this.m_Tracer = initTracer(tracingConfig, tracingOptions);
-        opentracing.initGlobalTracer(this.m_Tracer);
+        opentracing.initGlobalTracer(this);
     }
 
     public extract(format: string, carrier: any) {
