@@ -7,10 +7,13 @@ import { ITraceable } from './i-traceable';
  * 包装器
  */
 export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
+    private m_Tracer = opentracing.globalTracer();
+
     /**
      * 跟踪范围
      */
     private m_TracerSpan: opentracing.Span;
+
 
     /**
      * 构造函数
@@ -20,8 +23,7 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
      */
     public constructor(
         private m_Rpc: RpcBase,
-        private m_Tracer: opentracing.Tracer,
-        tracerSpan: opentracing.Span,
+        tracerSpan?: opentracing.Span,
     ) {
         super();
 
@@ -56,7 +58,6 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
     public withTrace(parentSpan: opentracing.Span) {
         return parentSpan ? new JaegerClientRpc(
             this.m_Rpc,
-            this.m_Tracer,
             parentSpan
         ) : this;
     }
