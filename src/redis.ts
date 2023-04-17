@@ -4,6 +4,8 @@ import { IRedisGeo, IRedisZMember, IRedisZRangeByLexOption, IRedisZRangeByScoreO
 import { ITraceable } from './i-traceable';
 
 export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
+    private m_Tracer = opentracing.globalTracer();
+
     private m_TracerSpan: opentracing.Span;
 
     /**
@@ -15,10 +17,9 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
      */
     public constructor(
         private m_Redis: IRedis,
-        private m_Tracer: opentracing.Tracer,
         parentTracerSpan?: opentracing.Span
     ) {
-        this.m_TracerSpan = parentTracerSpan ? m_Tracer?.startSpan('redis', {
+        this.m_TracerSpan = parentTracerSpan ? this.m_Tracer?.startSpan('redis', {
             childOf: parentTracerSpan
         }) : null;
     }
@@ -304,7 +305,6 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
     public withTrace(parentSpan: opentracing.Span) {
         return parentSpan ? new JeagerClientRedis(
             this.m_Redis,
-            this.m_Tracer,
             parentSpan,
         ) : this;
     }

@@ -8,6 +8,8 @@ enum Action {
 }
 
 export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
+    private m_Tracer = opentracing.globalTracer();
+
     /**
      * 提交后函数
      */
@@ -21,8 +23,7 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
 
     public constructor(
         private m_Uow: IUnitOfWorkRepository,
-        private m_ParentTracerSpan: opentracing.Span,
-        private m_Tracer: opentracing.Tracer,
+        private m_ParentTracerSpan: opentracing.Span
     ) { }
 
     /**
