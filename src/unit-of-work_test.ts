@@ -10,7 +10,7 @@ describe('src/service/jaeger-client/unit-of-work.ts', () => {
     describe('.commit()', () => {
         it('ok', async () => {
             const mockUow = new Mock<IUnitOfWorkRepository>();
-            const self = new Self(mockUow.actual, null, null);
+            const self = new Self(mockUow.actual, null);
 
             const mockSpan = new Mock<opentracing.Span>();
             Reflect.set(self, 'm_Span', mockSpan.actual);
@@ -29,7 +29,7 @@ describe('src/service/jaeger-client/unit-of-work.ts', () => {
 
     describe('.registerAdd<T>(model: new () => T, entry: T)', () => {
         it('ok', () => {
-            const self = new Self(null, null, null);
+            const self = new Self(null, null);
 
             self.registerAdd(TestUnitOfWorkModel.name, {});
         });
@@ -38,7 +38,7 @@ describe('src/service/jaeger-client/unit-of-work.ts', () => {
     describe('.registerRemove(table: string, entry: any)', () => {
         it('ok', () => {
             const mockUow = new Mock<IUnitOfWorkRepository>();
-            const self = new Self(mockUow.actual, null, null);
+            const self = new Self(mockUow.actual, null);
 
             mockUow.expected.registerRemove(TestUnitOfWorkModel.name, {});
 
@@ -49,7 +49,7 @@ describe('src/service/jaeger-client/unit-of-work.ts', () => {
     describe('.registerSave(table: string, entry: any)', () => {
         it('ok', () => {
             const mockUow = new Mock<IUnitOfWorkRepository>();
-            const self = new Self(mockUow.actual, null, null);
+            const self = new Self(mockUow.actual, null);
 
             mockUow.expected.registerSave(TestUnitOfWorkModel.name, {});
 

@@ -8,7 +8,6 @@ import { JaegerClientUnitOfWork } from './unit-of-work';
 export class JaegerClientDbFactory extends DbFactoryBase implements ITraceable<DbFactoryBase> {
     public constructor(
         private m_DbFactory: DbFactoryBase,
-        private m_Tracer: opentracing.Tracer,
         private m_ParentSpan?: opentracing.Span
     ) {
         super();
@@ -19,7 +18,6 @@ export class JaegerClientDbFactory extends DbFactoryBase implements ITraceable<D
 
         return new JaegerClientDbRepository<T>(
             dbRepository,
-            this.m_Tracer,
             this.m_ParentSpan
         );
     }
@@ -27,15 +25,13 @@ export class JaegerClientDbFactory extends DbFactoryBase implements ITraceable<D
     public uow() {
         return new JaegerClientUnitOfWork(
             this.m_DbFactory.uow() as IUnitOfWorkRepository,
-            this.m_ParentSpan,
-            this.m_Tracer,
+            this.m_ParentSpan
         );
     }
 
     public withTrace(parentSpan: opentracing.Span) {
         return parentSpan ? new JaegerClientDbFactory(
             this.m_DbFactory,
-            this.m_Tracer,
             parentSpan
         ) : this.m_DbFactory;
     }

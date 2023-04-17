@@ -2,12 +2,13 @@ import { opentracing } from 'jaeger-client';
 import { DbQueryOption, IDbQuery } from 'lite-ts-db';
 
 export class JaegerClientDbQuery<T> implements IDbQuery<T> {
+    private m_Tracer = opentracing.globalTracer();
+
     private m_TracerSpan: opentracing.Span;
 
     public constructor(
         private m_DbQuery: IDbQuery<T>,
         private m_Table: string,
-        private m_Tracer: opentracing.Tracer,
         parentTracerSpan: opentracing.Span,
     ) {
         this.m_TracerSpan = parentTracerSpan ? this.m_Tracer?.startSpan('db.query', {

@@ -6,8 +6,7 @@ import { JaegerClientDbQuery } from './db-query';
 export class JaegerClientDbRepository<T extends DbModel> implements IDbRepository<T> {
     public constructor(
         private m_DbRepository: IDbRepository<T>,
-        private m_Tracer: opentracing.Tracer,
-        private m_ParentTracerSpan?: opentracing.Span,
+        private m_ParentTracerSpan?: opentracing.Span
     ) { }
 
     public async add(entry: T) {
@@ -24,6 +23,6 @@ export class JaegerClientDbRepository<T extends DbModel> implements IDbRepositor
 
     public query() {
         const query = this.m_DbRepository.query();
-        return new JaegerClientDbQuery<T>(query, (this.m_DbRepository as DbRepository<T>).model, this.m_Tracer, this.m_ParentTracerSpan);
+        return new JaegerClientDbQuery<T>(query, (this.m_DbRepository as DbRepository<T>).model, this.m_ParentTracerSpan);
     }
 }
