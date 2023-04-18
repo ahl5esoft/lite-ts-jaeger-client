@@ -1,20 +1,21 @@
-import { initTracer, opentracing, TracingConfig, TracingOptions } from 'jaeger-client';
+import { opentracing, TracingConfig, TracingOptions } from 'jaeger-client';
+import { TracerBase } from './tracer-base';
 
-export class ChildTracer extends opentracing.Tracer {
-    private m_Tracer: opentracing.Tracer;
+export class ChildTracer extends TracerBase {
 
     public constructor(
-        tracingConfig: TracingConfig,
-        tracingOptions: TracingOptions,
+        cfg: {
+            config: TracingConfig,
+            options?: TracingOptions,
+        },
+        name: string,
+        version: string
     ) {
-        super();
-
-        this.m_Tracer = initTracer(tracingConfig, tracingOptions);
-        opentracing.initGlobalTracer(this);
+        super(cfg, name, version);
     }
 
     public extract(format: string, carrier: any) {
-        const ctx = this.m_Tracer.extract(format, carrier);
+        const ctx = this.tracer.extract(format, carrier);
         if (!ctx?.toSpanId() && !ctx?.toTraceId())
             return null;
         return ctx;
@@ -24,10 +25,10 @@ export class ChildTracer extends opentracing.Tracer {
         if (!options.childOf)
             return null;
 
-        return this.m_Tracer.startSpan(name, options);
+        return this.tracer.startSpan(name, options);
     }
 
     public inject(spanContext: opentracing.SpanContext | opentracing.Span, format: string, carrier: any) {
-        return this.m_Tracer.inject(spanContext, format, carrier);
+        return this.tracer.inject(spanContext, format, carrier);
     }
 }

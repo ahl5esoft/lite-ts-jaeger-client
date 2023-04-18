@@ -1,35 +1,35 @@
-import { initTracer, opentracing, TracingConfig, TracingOptions } from 'jaeger-client';
+import { opentracing, TracingConfig, TracingOptions } from 'jaeger-client';
 
 import { Span, FinishPredicate } from './span';
+import { TracerBase } from './tracer-base';
 
-export class RootTracer extends opentracing.Tracer {
-    private m_Tracer: opentracing.Tracer;
-
+export class RootTracer extends TracerBase {
     public constructor(
-        tracingConfig: TracingConfig,
-        tracingOptions: TracingOptions,
+        cfg: {
+            config: TracingConfig,
+            options?: TracingOptions,
+        },
+        name: string,
+        version: string,
         private m_FinishPredicate?: FinishPredicate
     ) {
-        super();
-
-        this.m_Tracer = initTracer(tracingConfig, tracingOptions);
-        opentracing.initGlobalTracer(this);
+        super(cfg, name, version);
     }
 
     public extract(format: string, carrier: any) {
-        return this.m_Tracer.extract(format, carrier);
+        return this.tracer.extract(format, carrier);
     }
 
     public startSpan(name: string, options: opentracing.SpanOptions = {}) {
         return new Span(
             name,
-            this.m_Tracer.startSpan(name, options),
-            this.m_Tracer,
+            this.tracer.startSpan(name, options),
+            this.tracer,
             this.m_FinishPredicate
         );
     }
 
     public inject(spanContext: opentracing.SpanContext | opentracing.Span, format: string, carrier: any) {
-        return this.m_Tracer.inject(spanContext, format, carrier);
+        return this.tracer.inject(spanContext, format, carrier);
     }
 }
