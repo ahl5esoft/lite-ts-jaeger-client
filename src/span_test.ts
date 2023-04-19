@@ -8,19 +8,22 @@ describe('src/span.ts', () => {
         it('ok', async () => {
             const tracer = new RootTracer(
                 {
-                    config: {
-                        serviceName: 'framework-dev-gateway',
-                        reporter: {
-                            collectorEndpoint: 'http://10.10.0.66:14268/api/traces'
+                    openTracing: {
+                        config: {
+                            serviceName: 'framework-dev-gateway',
+                            reporter: {
+                                collectorEndpoint: 'http://10.10.0.66:14268/api/traces'
+                            },
+                            sampler: {
+                                type: 'const',
+                                param: 1
+                            }
                         },
-                        sampler: {
-                            type: 'const',
-                            param: 1
-                        }
-                    }
-                },
-                'framework-dev-gateway',
-                '1.0.0'
+                        options: {}
+                    },
+                    name: 'framework-dev-gateway',
+                    version: '1.0.0'
+                }
             );
 
             const whitelist = [

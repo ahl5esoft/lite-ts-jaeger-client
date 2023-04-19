@@ -1,24 +1,19 @@
-import { TracingConfig, TracingOptions, initTracer, opentracing } from 'jaeger-client';
+import { initTracer, opentracing } from 'jaeger-client';
+
+import { Default } from './default';
 
 export abstract class TracerBase extends opentracing.Tracer {
     protected tracer: opentracing.Tracer;
 
-    public constructor(
-        cfg: {
-            config: TracingConfig,
-            options?: TracingOptions,
-        },
-        name: string,
-        version: string,
-    ) {
+    public constructor(cfg: Default) {
         super();
 
-        cfg.config.serviceName = name;
-        cfg.options ??= {};
-        cfg.options.tags ??= {};
-        cfg.options.tags.version = version;
+        cfg.openTracing.config.serviceName = cfg.name;
+        cfg.openTracing.options ??= {};
+        cfg.openTracing.options.tags ??= {};
+        cfg.openTracing.options.tags.version = cfg.version;
 
-        this.tracer = initTracer(cfg.config, cfg.options);
+        this.tracer = initTracer(cfg.openTracing.config, cfg.openTracing.options);
         opentracing.initGlobalTracer(this);
     }
 }
