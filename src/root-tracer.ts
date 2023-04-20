@@ -1,12 +1,12 @@
 import { opentracing } from 'jaeger-client';
 
-import { Default } from './default';
+import { Config } from './config';
 import { Span, FinishPredicate } from './span';
 import { TracerBase } from './tracer-base';
 
 export class RootTracer extends TracerBase {
     public constructor(
-        cfg: Default,
+        cfg: Config,
         private m_FinishPredicate?: FinishPredicate
     ) {
         super(cfg);
