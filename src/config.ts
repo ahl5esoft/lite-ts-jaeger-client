@@ -1,6 +1,6 @@
 import { TracingConfig, TracingOptions } from 'jaeger-client';
 
-export class Default {
+export class Config {
     public name: string;
     public openTracing: {
         config: TracingConfig;

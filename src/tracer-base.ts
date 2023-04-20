@@ -1,11 +1,11 @@
 import { initTracer, opentracing } from 'jaeger-client';
 
-import { Default } from './default';
+import { Config } from './config';
 
 export abstract class TracerBase extends opentracing.Tracer {
     protected tracer: opentracing.Tracer;
 
-    public constructor(cfg: Default) {
+    public constructor(cfg: Config) {
         super();
 
         cfg.openTracing.config.serviceName = cfg.name;
