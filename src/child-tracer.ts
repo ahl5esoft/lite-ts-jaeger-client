@@ -1,17 +1,12 @@
-import { opentracing, TracingConfig, TracingOptions } from 'jaeger-client';
+import { opentracing } from 'jaeger-client';
+
+import { Default } from './default';
 import { TracerBase } from './tracer-base';
 
 export class ChildTracer extends TracerBase {
 
-    public constructor(
-        cfg: {
-            config: TracingConfig,
-            options?: TracingOptions,
-        },
-        name: string,
-        version: string
-    ) {
-        super(cfg, name, version);
+    public constructor(cfg: Default) {
+        super(cfg);
     }
 
     public extract(format: string, carrier: any) {

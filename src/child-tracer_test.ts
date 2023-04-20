@@ -7,19 +7,21 @@ describe('src/child-tracer.ts', () => {
     describe('.extract(format: string, carrier: any)', () => {
         const tracer = new ChildTracer(
             {
-                config: {
-                    reporter: {
-                        collectorEndpoint: 'http://10.10.0.66:14268/api/traces'
+                openTracing: {
+                    config: {
+                        reporter: {
+                            collectorEndpoint: 'http://10.10.0.66:14268/api/traces'
+                        },
+                        sampler: {
+                            type: 'const',
+                            param: 1
+                        }
                     },
-                    sampler: {
-                        type: 'const',
-                        param: 1
-                    }
+                    options: {}
                 },
-                options: {}
-            },
-            'framework-dev-gatewat',
-            '1.0.0'
+                name: 'framework-dev-gatewat',
+                version: '1.0.0'
+            }
         );
 
         it('uber-trace-id is not exists', async () => {
