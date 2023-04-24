@@ -113,6 +113,13 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
         });
     }
 
+    public async hmset(key: string, args: { [key: string]: string; }) {
+        return await this.exec('hmset', [key, args], {
+            key,
+            args
+        });
+    }
+
     public async hset(key: string, field: string, value: string) {
         return await this.exec('hset', [key, field, value], {
             field,
