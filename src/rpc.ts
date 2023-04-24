@@ -40,7 +40,10 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
             this.m_Tracer?.inject(this.m_TracerSpan, opentracing.FORMAT_HTTP_HEADERS, v.header);
         }
 
-        const resp = await this.m_Rpc.call<T>(v);
+        const resp = await this.m_Rpc.call<T>({
+            ...v,
+            isThrow: false
+        });
 
         if (this.m_TracerSpan) {
             this.m_TracerSpan.log({

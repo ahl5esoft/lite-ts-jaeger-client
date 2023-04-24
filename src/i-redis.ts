@@ -128,6 +128,14 @@ export interface IRedis {
     hkeys(key: string): Promise<string[]>;
 
     /**
+     * 批量设置hash字段的值
+     * 
+     * @param key 键
+     * @param args { 字段 : 值 }
+     */
+    hmset(key: string, args: { [key: string]: string; }): Promise<void>;
+
+    /**
      * 设置hash字段的值
      * 
      * @param key 键
