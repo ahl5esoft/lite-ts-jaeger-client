@@ -15,6 +15,7 @@ describe('src/service/jaeger/db-repository.ts', () => {
             const self = new Self(
                 mockDbRepository.actual,
                 null,
+                null
             );
 
             const query_ = {};

@@ -1,5 +1,6 @@
 import { opentracing } from 'jaeger-client';
 import { IUnitOfWorkRepository } from 'lite-ts-db';
+import { ITracerSpan, TracerBase } from 'lite-ts-tracer';
 
 enum Action {
     delete = 'remove',
@@ -8,8 +9,6 @@ enum Action {
 }
 
 export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
-    private m_Tracer = opentracing.globalTracer();
-
     /**
      * 提交后函数
      */
@@ -23,7 +22,8 @@ export class JaegerClientUnitOfWork implements IUnitOfWorkRepository {
 
     public constructor(
         private m_Uow: IUnitOfWorkRepository,
-        private m_ParentTracerSpan: opentracing.Span
+        private m_ParentTracerSpan: ITracerSpan,
+        private m_Tracer: TracerBase
     ) { }
 
     /**

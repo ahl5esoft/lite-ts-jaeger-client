@@ -1,34 +1,26 @@
 import { opentracing } from 'jaeger-client';
 import { RpcBase, RpcCallOption } from 'lite-ts-rpc';
+import { ITraceable, ITracerSpan, TracerBase } from 'lite-ts-tracer';
 
-import { ITraceable } from './i-traceable';
-
-/**
- * 包装器
- */
 export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
-    private m_Tracer = opentracing.globalTracer();
-
-    /**
-     * 跟踪范围
-     */
-    private m_TracerSpan: opentracing.Span;
-
+    private m_TracerSpan: ITracerSpan;
 
     /**
      * 构造函数
      * 
      * @param m_Rpc 创建rpc函数
-     * @param tracerSpan 父跟踪范围
+     * @param m_Tracer 追踪器
+     * @param parentTracerSpan 父跟踪范围
      */
     public constructor(
         private m_Rpc: RpcBase,
-        tracerSpan?: opentracing.Span,
+        private m_Tracer: TracerBase,
+        parentTracerSpan?: ITracerSpan
     ) {
         super();
 
-        this.m_TracerSpan = tracerSpan ? this.m_Tracer?.startSpan('rpc', {
-            childOf: tracerSpan,
+        this.m_TracerSpan = parentTracerSpan ? this.m_Tracer?.startSpan('rpc', {
+            childOf: parentTracerSpan,
         }) : null;
     }
 
@@ -58,9 +50,10 @@ export class JaegerClientRpc extends RpcBase implements ITraceable<RpcBase> {
         return resp;
     }
 
-    public withTrace(parentSpan: opentracing.Span) {
+    public withTrace(parentSpan: ITracerSpan) {
         return parentSpan ? new JaegerClientRpc(
             this.m_Rpc,
+            this.m_Tracer,
             parentSpan
         ) : this;
     }

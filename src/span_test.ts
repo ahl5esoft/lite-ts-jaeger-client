@@ -45,9 +45,7 @@ describe('src/span.ts', () => {
                 }
             );
 
-            self.addTags({
-                [key]: 'user0'
-            });
+            self.setTag(key, 'user0');
 
             await self.finish();
 
