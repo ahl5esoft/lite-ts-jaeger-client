@@ -11,7 +11,7 @@ describe('src/service/opentracing/db-query.ts', () => {
     describe('.count()', async () => {
         it('ok', async () => {
             const mockDbQuery = new Mock<IDbQuery<TestDbQuery>>();
-            const self = new Self(mockDbQuery.actual, TestDbQuery.name, null);
+            const self = new Self(mockDbQuery.actual, TestDbQuery.name, null, null);
 
             const mockSpan = new Mock<opentracing.Span>();
             Reflect.set(self, 'm_Span', mockSpan.actual);
@@ -41,7 +41,7 @@ describe('src/service/opentracing/db-query.ts', () => {
 
         it('where', async () => {
             const mockDbQuery = new Mock<IDbQuery<TestDbQuery>>();
-            const self = new Self(mockDbQuery.actual, TestDbQuery.name, null);
+            const self = new Self(mockDbQuery.actual, TestDbQuery.name, null, null);
 
             const mockSpan = new Mock<opentracing.Span>();
             Reflect.set(self, 'm_Span', mockSpan.actual);
@@ -73,7 +73,7 @@ describe('src/service/opentracing/db-query.ts', () => {
     describe('.toArray(v?: Partial<IDbQueryOption>)', async () => {
         it('ok', async () => {
             const mockDbQuery = new Mock<IDbQuery<TestDbQuery>>();
-            const self = new Self(mockDbQuery.actual, TestDbQuery.name, null);
+            const self = new Self(mockDbQuery.actual, TestDbQuery.name, null, null);
 
             mockDbQuery.expectReturn(
                 r => r.toArray(undefined),

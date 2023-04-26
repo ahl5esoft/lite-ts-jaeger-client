@@ -1,10 +1,9 @@
 import { opentracing } from 'jaeger-client';
 
 import { Config } from './config';
-import { TracerBase } from './tracer-base';
+import { JaegerClientTracerBase } from './tracer-base';
 
-export class ChildTracer extends TracerBase {
-
+export class ChildTracer extends JaegerClientTracerBase {
     public constructor(cfg: Config) {
         super(cfg);
     }

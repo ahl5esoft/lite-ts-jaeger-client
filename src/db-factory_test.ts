@@ -42,7 +42,8 @@ describe('src/service/jaeger/db-factory.ts', () => {
             const mockDbFactory = new Mock<DbFactoryBase>();
             const self = new Self(
                 mockDbFactory.actual,
-                new opentracing.Span()
+                null,
+                new opentracing.Span(),
             );
 
             const mockUow = new Mock<IUnitOfWork>();

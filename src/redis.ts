@@ -1,12 +1,9 @@
 import { opentracing } from 'jaeger-client';
+import { RedisBase, IRedisGeo, IRedisZMember, IRedisZRangeByLexOption, IRedisZRangeByScoreOption } from 'lite-ts-redis';
+import { ITraceable, TracerBase, ITracerSpan } from 'lite-ts-tracer';
 
-import { IRedisGeo, IRedisZMember, IRedisZRangeByLexOption, IRedisZRangeByScoreOption, IRedis } from './i-redis';
-import { ITraceable } from './i-traceable';
-
-export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
-    private m_Tracer = opentracing.globalTracer();
-
-    private m_TracerSpan: opentracing.Span;
+export class JeagerClientRedis extends RedisBase implements ITraceable<RedisBase> {
+    private m_TracerSpan: ITracerSpan;
 
     /**
      * 构造函数
@@ -16,9 +13,12 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
      * @param parentTracerSpan 父跟踪范围
      */
     public constructor(
-        private m_Redis: IRedis,
-        parentTracerSpan?: opentracing.Span
+        private m_Redis: RedisBase,
+        private m_Tracer: TracerBase,
+        parentTracerSpan?: ITracerSpan
     ) {
+        super();
+
         this.m_TracerSpan = parentTracerSpan ? this.m_Tracer?.startSpan('redis', {
             childOf: parentTracerSpan
         }) : null;
@@ -309,9 +309,10 @@ export class JeagerClientRedis implements IRedis, ITraceable<IRedis> {
      * 
      * @param parentSpan 父范围
      */
-    public withTrace(parentSpan: opentracing.Span) {
+    public withTrace(parentSpan: ITracerSpan) {
         return parentSpan ? new JeagerClientRedis(
             this.m_Redis,
+            this.m_Tracer,
             parentSpan,
         ) : this;
     }
