@@ -6,9 +6,8 @@
   "dependencies": {
     "jaeger-client": "^3.19.0",
     "lite-ts-db": "^1.10.4",
-    "lite-ts-redis": "^3.8.1",
-    "lite-ts-rpc": "^3.11.0",
-    "lite-ts-tracer": "^3.0.0"
+    "lite-ts-express": "^3.10.5",
+    "lite-ts-redis": "^3.8.1"
   },
   "description": "链路追踪",
   "devDependencies": {
