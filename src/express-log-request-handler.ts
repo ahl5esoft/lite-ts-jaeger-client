@@ -2,7 +2,7 @@ import { opentracing } from 'jaeger-client';
 import { ExpressRequestHandlerBase, RequestHandlerContext } from 'lite-ts-express';
 import { LogFactoryBase } from 'lite-ts-log';
 
-export class ExpressLogRequestHandler extends ExpressRequestHandlerBase {
+export class JaegerClientExpressLogRequestHandler extends ExpressRequestHandlerBase {
     public constructor(
         private m_LogFactory: LogFactoryBase,
         private m_LabelKey: string,
