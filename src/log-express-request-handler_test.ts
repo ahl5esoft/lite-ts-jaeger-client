@@ -3,9 +3,9 @@ import { ILog, LogFactoryBase } from 'lite-ts-log';
 import { ExpressRequestHandlerBase } from 'lite-ts-express';
 import { Mock } from 'lite-ts-mock';
 
-import { JaegerClientExpressLogRequestHandler as Self } from './express-log-request-handler';
+import { JaegerClientLogExpressRequestHandler as Self } from './log-express-request-handler';
 
-describe('src/log-request-handler.ts', () => {
+describe('src/log-express-request-handler.ts', () => {
     describe('.handle(ctx: RequestHandlerContext)', () => {
         it('ok', async () => {
             const mockFactory = new Mock<LogFactoryBase>();
