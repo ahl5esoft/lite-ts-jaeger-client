@@ -3,7 +3,7 @@ import { ILog, LogFactoryBase } from 'lite-ts-log';
 import { ExpressRequestHandlerBase } from 'lite-ts-express';
 import { Mock } from 'lite-ts-mock';
 
-import { ExpressLogRequestHandler as Self } from './express-log-request-handler';
+import { JaegerClientExpressLogRequestHandler as Self } from './express-log-request-handler';
 
 describe('src/log-request-handler.ts', () => {
     describe('.handle(ctx: RequestHandlerContext)', () => {

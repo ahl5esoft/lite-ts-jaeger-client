@@ -2,7 +2,7 @@ import { opentracing } from 'jaeger-client';
 import { ExpressRequestHandlerBase, RequestHandlerContext } from 'lite-ts-express';
 import { TracerBase } from 'lite-ts-tracer';
 
-export class ExpressInitTracerRequestHandler extends ExpressRequestHandlerBase {
+export class JaegerClientExpressInitTracerRequestHandler extends ExpressRequestHandlerBase {
     public constructor(
         private m_Tracer: TracerBase
     ) {
