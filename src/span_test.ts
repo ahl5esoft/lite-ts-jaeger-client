@@ -36,8 +36,7 @@ describe('src/span.ts', () => {
             let res: boolean;
             const self = new Self(
                 '/app/mh/test',
-                tracer.startSpan('/app/mh/test'),
-                tracer,
+                tracer.startSpan('/app/mh/test') as any,
                 async (_: string, tags: { [key: string]: any; }) => {
                     const ok = whitelist.includes(tags[key]);
                     res = ok;

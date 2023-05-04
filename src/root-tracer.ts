@@ -1,4 +1,5 @@
 import { opentracing } from 'jaeger-client';
+import { ITracerSpan, ITracerSpanContext } from 'lite-ts-tracer';
 
 import { Config } from './config';
 import { Span, FinishPredicate } from './span';
@@ -20,12 +21,11 @@ export class RootTracer extends JaegerClientTracerBase {
         return new Span(
             name,
             this.tracer.startSpan(name, options),
-            this.tracer,
             this.m_FinishPredicate
         );
     }
 
-    public inject(spanContext: opentracing.SpanContext | opentracing.Span, format: string, carrier: any) {
-        return this.tracer.inject(spanContext, format, carrier);
+    public inject(spanContext: ITracerSpan | ITracerSpanContext, format: string, carrier: any) {
+        return this.tracer.inject(spanContext as opentracing.SpanContext, format, carrier);
     }
 }
