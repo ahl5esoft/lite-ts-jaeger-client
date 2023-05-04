@@ -1,4 +1,5 @@
-import { ITracerSpan, TracerBase } from 'lite-ts-tracer';
+import { opentracing } from 'jaeger-client';
+import { ITracerSpan } from 'lite-ts-tracer';
 
 export type FinishPredicate = (name: string, tags: { [key: string]: any; }) => Promise<boolean>;
 
@@ -7,13 +8,12 @@ export class Span implements ITracerSpan {
 
     public constructor(
         private m_Name: string,
-        private m_Span: ITracerSpan,
-        private m_Tracer: TracerBase,
+        private m_Span: opentracing.Span,
         private m_FinishPredicate?: FinishPredicate
     ) { }
 
-    public tracer() {
-        return this.m_Tracer;
+    public toString() {
+        return this.m_Span.context().toString();
     }
 
     public setTag(key: string, value: any) {
